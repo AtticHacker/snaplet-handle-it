@@ -18,7 +18,12 @@ library
 
   extensions: OverloadedStrings
             , GADTs
+            , ExistentialQuantification
   hs-source-dirs: src
+
+  exposed-modules:
+    Snap.Snaplet.HandleIt
+    Snap.Snaplet.HandleIt.Header
 
   other-modules:
     Paths_snaplet_handle_it
@@ -29,3 +34,4 @@ library
     , snap       >= 0.11
     , filepath   >= 1.3
     , bytestring >= 0.9
+    , mtl >= 2
