@@ -1,12 +1,13 @@
 module Snap.Snaplet.HandleIt where
 
 import Snap.Snaplet(SnapletInit, makeSnaplet)
-import Snap.Snaplet.HandleIt.Header(HandleIt(..), HDL(..))
-import qualified Data.ByteString.Char8 as BS
+import Snap.Snaplet.HandleIt.Header(HandleIt(..), Routing)
+import Snap.Snaplet.HandleIt.Router(manageRouting)
+import Snap.Snaplet.Heist(HasHeist)
+
 import Paths_snaplet_handle_it
 
-
 -- | Initiates Handle-it
-handleItInit :: [HDL] -> SnapletInit a (HandleIt [(BS.ByteString, HDL)])
+handleItInit :: HasHeist a => Routing -> SnapletInit a (HandleIt Routing)
 handleItInit routes = makeSnaplet "handleIt" "" Nothing $ do
-    return $ HandleIt []
+    manageRouting routes >>= return . HandleIt
