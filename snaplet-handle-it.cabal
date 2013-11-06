@@ -24,6 +24,7 @@ library
   exposed-modules:
     Snap.Snaplet.HandleIt
     Snap.Snaplet.HandleIt.Header
+    Snap.Snaplet.HandleIt.Router
 
   other-modules:
     Paths_snaplet_handle_it

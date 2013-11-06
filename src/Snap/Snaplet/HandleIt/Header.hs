@@ -2,9 +2,9 @@ module Snap.Snaplet.HandleIt.Header where
 
 import Snap.Snaplet(Handler)
 import qualified Data.ByteString.Char8 as BS
-import Snap.Snaplet.Heist(HasHeist, render)
+import Snap.Snaplet.Heist(HasHeist)
 import Control.Monad.State(State)
-import Data.Char
+import Data.Char(toLower)
 
 -- | Types for routing
 type Routing  = [(Restful, HDL)]
@@ -18,26 +18,26 @@ data HandleIt a where
 data HDL = forall s. Handling s => HDL s
 
 -- | Restful actions Data Type
-data Restful = RIndex  | RShow   | RNew     | REdit
-             | RCreate | RUpdate | RDestroy | RDefault
+data Restful = IndexR  | ShowR   | NewR     | EditR
+             | CreateR | UpdateR | DestroyR | DefaultR
+             deriving Show
 
 -- | Class for Handler types
 class Show a => Handling a where
     handleName :: a -> BS.ByteString
     handleName = BS.takeWhile (/=' ') . BS.pack . map toLower . show
 
-    hIndex   :: HasHeist b => a -> Handler b c ()
-    hShow    :: HasHeist b => a -> Handler b c ()
-    hNew     :: HasHeist b => a -> Handler b c ()
-    hEdit    :: HasHeist b => a -> Handler b c ()
-    hCreate  :: HasHeist b => a -> Handler b c ()
-    hUpdate  :: HasHeist b => a -> Handler b c ()
-    hDestroy :: HasHeist b => a -> Handler b c ()
-
-    hIndex   _ = render "404"
-    hShow    _ = render "404"
-    hNew     _ = render "404"
-    hEdit    _ = render "404"
-    hCreate  _ = render "404"
-    hUpdate  _ = render "404"
-    hDestroy _ = render "404"
+    indexH   :: HasHeist b => a -> Handler b c ()
+    showH    :: HasHeist b => a -> Handler b c ()
+    newH     :: HasHeist b => a -> Handler b c ()
+    editH    :: HasHeist b => a -> Handler b c ()
+    createH  :: HasHeist b => a -> Handler b c ()
+    updateH  :: HasHeist b => a -> Handler b c ()
+    destroyH :: HasHeist b => a -> Handler b c ()
+    indexH   _ = return ()
+    showH    _ = return ()
+    newH     _ = return ()
+    editH    _ = return ()
+    createH  _ = return ()
+    updateH  _ = return ()
+    destroyH _ = return ()
