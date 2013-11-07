@@ -30,13 +30,13 @@ restfulToFunction UpdateR  = updateH
 restfulToFunction DestroyR = destroyH
 
 restfulToURL :: Handling a => Restful -> a -> BS.ByteString
-restfulToURL IndexR   = (BS.append "/")      . handleName
-restfulToURL ShowR    = (prepend "/:id")     . (BS.append "/") . handleName
-restfulToURL NewR     = (prepend "/new")     . (BS.append "/") . handleName
-restfulToURL EditR    = (prepend "/edit")    . (BS.append "/") . handleName
-restfulToURL CreateR  = (prepend "/create")  . (BS.append "/") . handleName
-restfulToURL UpdateR  = (prepend "/update")  . (BS.append "/") . handleName
-restfulToURL DestroyR = (prepend "/destroy") . (BS.append "/") . handleName
+restfulToURL IndexR   = (BS.append "/")          . handleName
+restfulToURL ShowR    = (prepend "/:id")         . (BS.append "/") . handleName
+restfulToURL NewR     = (prepend "/new")         . (BS.append "/") . handleName
+restfulToURL EditR    = (prepend "/:id/edit")    . (BS.append "/") . handleName
+restfulToURL CreateR  = (prepend "/create")      . (BS.append "/") . handleName
+restfulToURL UpdateR  = (prepend "/:id/update")  . (BS.append "/") . handleName
+restfulToURL DestroyR = (prepend "/:id/destroy") . (BS.append "/") . handleName
 
 routePath :: HasHeist b => (Restful, HDL) -> (BS.ByteString, Handler b c ())
 routePath (rest, HDL h) = let url = restfulToURL rest h in

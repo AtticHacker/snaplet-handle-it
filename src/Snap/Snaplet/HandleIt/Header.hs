@@ -20,7 +20,7 @@ data HDL = forall s. Handling s => HDL s
 -- | Restful actions Data Type
 data Restful = IndexR  | ShowR   | NewR     | EditR
              | CreateR | UpdateR | DestroyR | DefaultR
-             deriving Show
+             deriving (Show, Eq)
 
 -- | Class for Handler types
 class Show a => Handling a where
