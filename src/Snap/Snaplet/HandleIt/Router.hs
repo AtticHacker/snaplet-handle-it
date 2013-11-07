@@ -1,11 +1,13 @@
 module Snap.Snaplet.HandleIt.Router where
 
-import Snap.Snaplet
+import Snap(Handler, method, Method(..), Initializer, addRoutes)
 import Snap.Snaplet.HandleIt.Header
 import Snap.Snaplet.HandleIt.Util(prepend)
-import Snap.Snaplet.Heist(HasHeist(..), render)
-import Control.Monad.State(runState, put, get)
+import Heist.Interpreted(bindSplices)
+import Snap.Snaplet.Heist(HasHeist(..), render, heistLocal)
 import qualified Data.ByteString.Char8 as BS
+
+import Control.Monad.State
 
 routing :: Router () -> Routing
 routing a = snd $ runState a []
@@ -40,16 +42,26 @@ restfulToURL DestroyR = (prepend "/:id/destroy") . (BS.append "/") . handleName
 
 routePath :: HasHeist b => (Restful, HDL) -> (BS.ByteString, Handler b c ())
 routePath (rest, HDL h) = let url = restfulToURL rest h in
-    (url, restfulToFunction rest h >> renderPath rest h url)
+    (url, wrapSplice h $ renderPath rest h url)
 
-renderPath :: (Handling a, HasHeist b) => Restful -> a ->
-              BS.ByteString -> Handler b c ()
-renderPath IndexR _ url = render $ url `BS.append` "/index"
-renderPath ShowR    a _ = render $ handleName a `BS.append` "/show"
-renderPath CreateR  _ _ = return ()
-renderPath DestroyR _ _ = return ()
-renderPath UpdateR  _ _ = return ()
-renderPath      _ _ url = render url
+wrapSplice :: (HasHeist b, Handling a) => a -> Handler b c () -> Handler b c ()
+wrapSplice h a = method GET $ heistLocal (bindSplices $ handleSplices h) $ a
+
+renderPath :: (Handling a, HasHeist b) => Restful
+              -> a -> BS.ByteString -> Handler b c ()
+
+renderPath IndexR a url = do
+    restfulToFunction IndexR a
+    render $ url `BS.append` "/index"
+
+renderPath ShowR    a _ = do
+    restfulToFunction ShowR a
+    render $ handleName a `BS.append` "/show"
+
+renderPath CreateR  a _   = restfulToFunction CreateR  a
+renderPath DestroyR a _   = restfulToFunction DestroyR a
+renderPath UpdateR  a _   = restfulToFunction UpdateR  a
+renderPath restful  a url = restfulToFunction restful  a >> render url
 
 manageRouting :: HasHeist b => Routing ->
                  Initializer b c [(BS.ByteString, Handler b c ())]

@@ -3,9 +3,10 @@ module Test.Snap.Snaplet.HandleIt.Router where
 import Test.HUnit
 import Snap.Snaplet.HandleIt.Router
 import Snap.Snaplet.HandleIt.Header
+
 -- Environment
 
-data User    = User    deriving (Show, Eq)
+data User = User deriving (Show, Eq)
 data Item = Item deriving (Show, Eq)
 
 instance Handling User

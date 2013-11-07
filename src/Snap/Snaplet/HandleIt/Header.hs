@@ -1,10 +1,15 @@
 module Snap.Snaplet.HandleIt.Header where
 
 import Snap.Snaplet(Handler)
-import qualified Data.ByteString.Char8 as BS
 import Snap.Snaplet.Heist(HasHeist)
+import Heist(HeistT)
+
 import Control.Monad.State(State)
+
 import Data.Char(toLower)
+import qualified Data.Text as T
+import qualified Data.ByteString.Char8 as BS
+import Text.XmlHtml(Node)
 
 -- | Types for routing
 type Routing  = [(Restful, HDL)]
@@ -26,6 +31,9 @@ data Restful = IndexR  | ShowR   | NewR     | EditR
 class Show a => Handling a where
     handleName :: a -> BS.ByteString
     handleName = BS.takeWhile (/=' ') . BS.pack . map toLower . show
+
+    handleSplices :: a -> [(T.Text, HeistT n (Handler b c) [Node])]
+    handleSplices _ = []
 
     indexH   :: HasHeist b => a -> Handler b c ()
     showH    :: HasHeist b => a -> Handler b c ()
