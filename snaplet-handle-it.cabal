@@ -25,6 +25,7 @@ library
     Snap.Snaplet.HandleIt
     Snap.Snaplet.HandleIt.Header
     Snap.Snaplet.HandleIt.Router
+    Snap.Snaplet.HandleIt.Internal.Router
 
   other-modules:
     Paths_snaplet_handle_it

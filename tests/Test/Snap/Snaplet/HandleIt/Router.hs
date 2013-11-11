@@ -3,7 +3,7 @@ module Test.Snap.Snaplet.HandleIt.Router where
 import Test.HUnit
 import Snap.Snaplet.HandleIt.Router
 import Snap.Snaplet.HandleIt.Header
-
+import Snap.Snaplet.HandleIt.Internal.Router
 -- Environment
 
 data User = User deriving (Show, Eq)
