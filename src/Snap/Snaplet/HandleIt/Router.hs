@@ -6,11 +6,9 @@ import Snap.Snaplet.HandleIt.Internal.Router
 import Snap.Snaplet.Heist(HasHeist(..))
 import qualified Data.ByteString.Char8 as BS
 
-import Control.Monad.State
+import Control.Monad.State(put, get)
 
-routing :: Router () -> Routing
-routing a = snd $ runState a []
-
+-- | resources adds all restful actions to State
 resources :: Handling s => s -> Router ()
 resources a = mapM (setSingle a)
               [ IndexR   , ShowR
@@ -18,9 +16,11 @@ resources a = mapM (setSingle a)
               , CreateR  , UpdateR
               , DestroyR ] >> return ()
 
+-- | setSingle adds a single
 setSingle  :: Handling s => s -> Restful -> Router ()
 setSingle a r = get >>= put . ((r, HDL a):)
 
+-- | This function takes the state result and adds the paths to the Snap app
 manageRouting :: HasHeist b => Routing ->
                  Initializer b c [(BS.ByteString, Handler b c ())]
 manageRouting routes = do
