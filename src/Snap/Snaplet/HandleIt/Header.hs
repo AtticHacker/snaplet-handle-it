@@ -7,10 +7,10 @@ import Heist(HeistT)
 import Control.Monad.State(State)
 
 import Data.Char(toLower)
-import qualified Data.Text as T
 import qualified Data.ByteString.Char8 as BS
 import Text.XmlHtml(Node)
-
+import Heist.SpliceAPI (Splices)
+import Data.Monoid (mempty)
 -- | Types for routing
 type Routing  = [(Restful, HDL)]
 type Router a = State Routing a
@@ -32,8 +32,8 @@ class Show a => Handling a where
     handleName :: a -> BS.ByteString
     handleName = BS.takeWhile (/=' ') . BS.pack . map toLower . show
 
-    handleSplices :: a -> [(T.Text, HeistT n (Handler b c) [Node])]
-    handleSplices _ = []
+    handleSplices :: a -> Splices (HeistT n (Handler b c) [Node])
+    handleSplices _ = mempty
 
     indexH   :: HasHeist b => a -> Handler b c ()
     showH    :: HasHeist b => a -> Handler b c ()
