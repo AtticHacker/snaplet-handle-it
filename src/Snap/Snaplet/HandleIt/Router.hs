@@ -5,7 +5,6 @@ import Snap.Snaplet.HandleIt.Header
 import Snap.Snaplet.HandleIt.Internal.Router
 import Snap.Snaplet.Heist(HasHeist(..))
 import qualified Data.ByteString.Char8 as BS
-
 import Control.Monad.State(put, get)
 
 -- | resources adds all restful actions to State
@@ -25,5 +24,12 @@ manageRouting :: HasHeist b => Routing ->
                  Initializer b c [(BS.ByteString, Handler b c ())]
 manageRouting routes = do
     let newRoutes = map routePath routes
+    addRoutes newRoutes
+    return newRoutes
+
+handleRoutes :: HasHeist b => Router () ->
+                 Initializer b c [(BS.ByteString, Handler b c ())]
+handleRoutes routes = do
+    let newRoutes = map routePath $ routing routes
     addRoutes newRoutes
     return newRoutes

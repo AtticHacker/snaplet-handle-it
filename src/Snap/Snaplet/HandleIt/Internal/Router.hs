@@ -17,7 +17,7 @@ restfulToFunction NewR     = newH
 restfulToFunction EditR    = editH
 restfulToFunction CreateR  = createH
 restfulToFunction UpdateR  = updateH
-restfulToFunction DestroyR = destroyH;
+restfulToFunction DestroyR = destroyH
 
 -- | restfulToUrl takes a Restful data constructor and
 -- returns it's associated path
