@@ -49,6 +49,14 @@ renderPath ShowR    a _ = do
     restfulToFunction ShowR a
     render $ handleName a <> "/show"
 
+renderPath NewR    a _ = do
+    restfulToFunction NewR a
+    render $ handleName a <> "/new"
+
+renderPath EditR    a _ = do
+    restfulToFunction EditR a
+    render $ handleName a <> "/edit"
+
 renderPath CreateR  a _   = restfulToFunction CreateR  a
 renderPath DestroyR a _   = restfulToFunction DestroyR a
 renderPath UpdateR  a _   = restfulToFunction UpdateR  a
