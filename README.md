@@ -82,7 +82,7 @@ instance Handling User where
     indexH User = liftIO $ putStrLn "Hello Index"
     handleSplices User = spliceList
 
-spliceList :: spliceList :: [(Text, HeistT n (Handler b c) [Node])]
+spliceList :: [(Text, HeistT n (Handler b c) [Node])]
 spliceList = [...]
 ```
 
