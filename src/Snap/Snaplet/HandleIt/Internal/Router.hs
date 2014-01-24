@@ -3,7 +3,7 @@ module Snap.Snaplet.HandleIt.Internal.Router where
 import Snap(Handler, method, Method(..))
 import Snap.Snaplet.HandleIt.Header
 import Snap.Snaplet.HandleIt.Util(prepend)
-import Snap.Snaplet.Heist(HasHeist(..), render, withSplices)
+import Snap.Snaplet.Heist(HasHeist(..), cRender, withSplices)
 import Data.ByteString.Char8
 import Control.Monad.State(runState)
 import Data.Monoid((<>))
@@ -43,24 +43,24 @@ wrapSplice h = method GET . withSplices (handleSplices h)
 renderPath :: (Handling a, HasHeist b) => Restful -> a -> ByteString -> Handler b c ()
 renderPath IndexR a url = do
     restfulToFunction IndexR a
-    render $ url <> "/index"
+    cRender $ url <> "/index"
 
 renderPath ShowR    a _ = do
     restfulToFunction ShowR a
-    render $ handleName a <> "/show"
+    cRender $ handleName a <> "/show"
 
 renderPath NewR    a _ = do
     restfulToFunction NewR a
-    render $ handleName a <> "/new"
+    cRender $ handleName a <> "/new"
 
 renderPath EditR    a _ = do
     restfulToFunction EditR a
-    render $ handleName a <> "/edit"
+    cRender $ handleName a <> "/edit"
 
 renderPath CreateR  a _   = restfulToFunction CreateR  a
 renderPath DestroyR a _   = restfulToFunction DestroyR a
 renderPath UpdateR  a _   = restfulToFunction UpdateR  a
-renderPath restful  a url = restfulToFunction restful  a >> render url
+renderPath restful  a url = restfulToFunction restful  a >> cRender url
 
 -- | Routing takes the routes that need to be added out of state
 routing :: Router () -> Routing
