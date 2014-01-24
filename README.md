@@ -70,22 +70,4 @@ instance Handling User where
 
 Whenever you visit the user index page, "Hello Index" will be printed in the console.
 
-We can also add Handler specific splices to our Handlers
-
-
-Handler/User.hs
-```
-module Handler.User where
-
-data User = User
-instance Handling User where
-    indexH User = liftIO $ putStrLn "Hello Index"
-    handleSplices User = spliceList
-
-spliceList :: [(Text, HeistT n (Handler b c) [Node])]
-spliceList = [...]
-```
-
-Now all the splices added to the spliceList function are only accessible to User pages. Other handlers won't be able to access them.
-
 More functionality coming soon.

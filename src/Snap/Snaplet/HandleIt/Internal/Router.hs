@@ -3,7 +3,7 @@ module Snap.Snaplet.HandleIt.Internal.Router where
 import Snap(Handler, method, Method(..))
 import Snap.Snaplet.HandleIt.Header
 import Snap.Snaplet.HandleIt.Util(prepend)
-import Snap.Snaplet.Heist(HasHeist(..), cRender, withSplices)
+import Snap.Snaplet.Heist(HasHeist(..), cRender)
 import Data.ByteString.Char8
 import Control.Monad.State(runState)
 import Data.Monoid((<>))
@@ -33,11 +33,7 @@ restfulToURL DestroyR = (prepend "/:id/destroy") . ((<>) "/") . handleName
 -- | routePath takes the Handler and Restful action and creates the route
 routePath :: HasHeist b => (Restful, HDL) -> (ByteString, Handler b c ())
 routePath (rest, HDL h) = let url = restfulToURL rest h in
-    (url, wrapSplice h $ renderPath rest h url)
-
--- | wrapSplice associates a splice to the handler
-wrapSplice :: (HasHeist b, Handling a) => a -> Handler b c () -> Handler b c ()
-wrapSplice h = method GET . withSplices (handleSplices h)
+    (url, renderPath rest h url)
 
 -- | renderPath builds the pathname and renders it if necessary
 renderPath :: (Handling a, HasHeist b) => Restful -> a -> ByteString -> Handler b c ()
