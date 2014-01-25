@@ -19,6 +19,7 @@ library
   extensions: OverloadedStrings
             , GADTs
             , ExistentialQuantification
+            , FlexibleContexts
   hs-source-dirs: src
 
   exposed-modules:

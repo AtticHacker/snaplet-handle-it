@@ -8,27 +8,28 @@ import qualified Data.ByteString.Char8 as BS
 import Control.Monad.State(put, get)
 
 -- | resources adds all restful actions to State
-resources :: Handling s => s -> Router ()
-resources a = mapM (setSingle a)
+resources :: Handling a b => a -> b -> Router () b
+resources a b = mapM (setSingle a b)
               [ IndexR   , ShowR
               , NewR     , EditR
               , CreateR  , UpdateR
               , DestroyR ] >> return ()
 
 -- | setSingle adds a single
-setSingle  :: Handling s => s -> Restful -> Router ()
-setSingle a r = get >>= put . ((r, HDL a):)
+setSingle  :: Handling a b => a -> b -> Restful -> Router () b
+setSingle a b r = get >>= put . ((r, HDL a b):)
 
 -- | This function takes the state result and adds the paths to the Snap app
-manageRouting :: HasHeist b => Routing ->
-                 Initializer b c [(BS.ByteString, Handler b c ())]
-manageRouting routes = do
-    let newRoutes = map routePath routes
-    addRoutes newRoutes
-    return newRoutes
+-- manageRouting
+--   :: Handling a b => [(Restful, HDL a b)] ->
+--                  Initializer b b [(BS.ByteString, Handler b b ())]
+-- manageRouting routes = do
+--     let newRoutes = map routePath routes
+--     addRoutes newRoutes
+--     return newRoutes
 
-handleRoutes :: HasHeist b => Router () ->
-                 Initializer b c [(BS.ByteString, Handler b c ())]
+handleRoutes  :: Handling () b => Router () b ->
+                 Initializer b b [(BS.ByteString, Handler b b ())]
 handleRoutes routes = do
     let newRoutes = map routePath $ routing routes
     addRoutes newRoutes
